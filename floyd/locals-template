@@ -1,0 +1,4 @@
+# Copy this to 'locals.tf' and put in the encryption-key and deploy-key for YOUR robot.
+locals {
+  encryption-key = "<redacted>"
+}
