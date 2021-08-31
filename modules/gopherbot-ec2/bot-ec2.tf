@@ -1,31 +1,51 @@
-locals {
-  bot-prefix = "/robots/${var.robot-name}"
+data "aws_region" "current" {}
+
+data "aws_caller_identity" "current" {}
+
+resource "aws_iam_instance_profile" "bot_profile" {
+  name = "bot_profile"
+  role = aws_iam_role.bot_role.name
 }
 
-resource "aws_ssm_parameter" "encryption-key" {
-  name        = "${local.bot-prefix}/GOPHER_ENCRYPTION_KEY"
-  description = "The robot's brain encryption key"
-  type        = "SecureString"
-  value       = var.encryption-key
-}
+resource "aws_iam_role" "bot_role" {
+  name = "bot_role"
+  path = "/"
 
-resource "aws_ssm_parameter" "repository" {
-  name        = "${local.bot-prefix}/GOPHER_CUSTOM_REPOSITORY"
-  description = "The robot's configuration repository"
-  type        = "String"
-  value       = var.repository
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
 }
-
-resource "aws_ssm_parameter" "protocol" {
-  name        = "${local.bot-prefix}/GOPHER_PROTOCOL"
-  description = "The robot's chat connection protocol"
-  type        = "String"
-  value       = var.protocol
-}
-
-resource "aws_ssm_parameter" "deploy-key" {
-  name        = "${local.bot-prefix}/GOPHER_DEPLOY_KEY"
-  description = "The robot's read-only ssh deploy key"
-  type        = "String"
-  value       = var.deploy-key
+EOF
+  managed_policy_arns = [
+    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
+    "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+  ]
+  inline_policy {
+    name = "param-access-policy"
+    policy = jsonencode({
+      Version = "2012-10-17"
+      Statement = [
+        {
+          Effect   = "Allow",
+          Action   = ["ssm:DescribeParameters"]
+          Resource = "*"
+        },
+        {
+          Effect   = "Allow"
+          Action   = ["ssm:GetParameters"]
+          Resource = "arn:aws:ssm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:parameter/robots/${var.robot-name}/*"
+        }
+      ]
+    })
+  }
 }
