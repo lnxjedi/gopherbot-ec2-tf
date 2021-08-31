@@ -9,6 +9,11 @@ variable "encryption-key" {
   description = "The robot's brain encryption key"
 }
 
+variable "deploy-key" {
+  type        = string
+  description = "The robot's read-only ssh deployment private key"
+}
+
 variable "repository" {
   type        = string
   description = "The robot's configuration repository"
