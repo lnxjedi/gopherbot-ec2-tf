@@ -42,7 +42,10 @@ EOF
         },
         {
           Effect   = "Allow"
-          Action   = ["ssm:GetParameters"]
+          Action   = [
+            "ssm:GetParameters",
+            "ssm:GetParametersByPath"
+          ]
           Resource = "arn:aws:ssm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:parameter/robots/${var.robot-name}/*"
         }
       ]
