@@ -1,6 +1,6 @@
 data "aws_ami" "amazon-linux-2" {
   most_recent = true
-  owners = ["amazon"]
+  owners      = ["amazon"]
 
   filter {
     name   = "name"
@@ -13,4 +13,5 @@ resource "aws_instance" "robot" {
   instance_type        = var.instance-type
   subnet_id            = var.subnet-id
   iam_instance_profile = aws_iam_instance_profile.bot_profile.name
+  tags                 = var.tags
 }
