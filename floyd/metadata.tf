@@ -1,4 +1,11 @@
 terraform {
+  backend "remote" {
+    organization = "LinuxJedi"
+    workspaces {
+      name = "floyd-ec2"
+    }
+  }
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"

@@ -1,7 +1,15 @@
+variable "encryption-key" {
+  type = string
+}
+
+variable "deploy-key" {
+  type = string
+}
+
 module "floyd-gopherbot" {
   source         = "../modules/gopherbot-ec2"
-  encryption-key = local.encryption-key
+  robot-name     = "floyd"
+  encryption-key = var.encryption-key
   repository     = "git@github.com:parsley42/floyd-gopherbot.git"
-  protocol       = "slack"
-  deploy-key     = local.deploy-key
+  deploy-key     = var.deploy-key
 }
