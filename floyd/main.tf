@@ -20,4 +20,7 @@ module "floyd-gopherbot" {
   repository     = "git@github.com:parsley42/floyd-gopherbot.git"
   deploy-key     = var.deploy-key
   subnet-id      = data.aws_subnet.floydnet.id
+  tags = {
+      Name = "Floyd"
+  }
 }

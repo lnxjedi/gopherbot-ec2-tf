@@ -36,3 +36,9 @@ variable "subnet-id" {
   description = "The subnet where the instance should launch"
   default     = ""
 }
+
+variable "tags" {
+  default     = {}
+  description = "Instance tags"
+  type        = map(string)    
+}
