@@ -9,9 +9,10 @@ data "aws_ami" "amazon-linux-2" {
 }
 
 resource "aws_instance" "robot" {
-  ami                  = data.aws_ami.amazon-linux-2.id
-  instance_type        = var.instance-type
-  subnet_id            = var.subnet-id
-  iam_instance_profile = aws_iam_instance_profile.bot_profile.name
-  tags                 = var.tags
+  ami                         = data.aws_ami.amazon-linux-2.id
+  instance_type               = var.instance-type
+  subnet_id                   = var.subnet-id
+  iam_instance_profile        = aws_iam_instance_profile.bot_profile.name
+  associate_public_ip_address = true
+  tags                        = var.tags
 }
