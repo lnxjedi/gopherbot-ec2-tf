@@ -24,7 +24,7 @@ resource "aws_ssm_parameter" "protocol" {
 }
 
 resource "aws_ssm_parameter" "deploy-key" {
-  name        = "${local.bot-prefix}/GOPHER_CUSTOM_REPOSITORY"
+  name        = "${local.bot-prefix}/GOPHER_DEPLOY_KEY"
   description = "The robot's read-only ssh deploy key"
   type        = "String"
   value       = var.deploy-key
