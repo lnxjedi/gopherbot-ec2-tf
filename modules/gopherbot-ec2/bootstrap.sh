@@ -72,4 +72,7 @@ EOF
 
 systemctl daemon-reload
 systemctl enable $BOT_NAME
+
+at now+1min <<EOF
 systemctl start $BOT_NAME
+EOF
