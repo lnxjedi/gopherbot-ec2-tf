@@ -4,7 +4,9 @@
 
 export PATH=$PATH:/usr/local/bin
 export AWS_REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region)
+echo "Detected region: $REGION"
 export INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+echo "Detected instance-id: $INSTANCE_ID"
 
 yum -y update
 yum -y install jq git
@@ -22,21 +24,23 @@ cd aws
 ./install
 cd /root
 rm -rf $AWSCLI
+aws --profile default configure set region $AWS_REGION
 
 # Install env-aws-params for GOPHERBOT_* env vars
 EAP_LATEST=$(curl --silent https://api.github.com/repos/lnxjedi/env-aws-params/releases/latest | jq -r .tag_name)
-curl -L -o /usr/local/bin/env-aws-params https://github.com/lnxjedi/env-aws-params/releases/download/$EAP_LATEST/env-aws-params_linux-amd64
+curl -s -L -o /usr/local/bin/env-aws-params https://github.com/lnxjedi/env-aws-params/releases/download/$EAP_LATEST/env-aws-params_linux-amd64
 chmod +x /usr/local/bin/env-aws-params
 
 # Install latest Gopherbot
 GBDL=/root/gopherbot.tar.gz
 GB_LATEST=$(curl --silent https://api.github.com/repos/lnxjedi/gopherbot/releases/latest | jq -r .tag_name)
-curl -L -o $GBDL https://github.com/lnxjedi/gopherbot/releases/download/$GB_LATEST/gopherbot-linux-amd64.tar.gz
+curl -s -L -o $GBDL https://github.com/lnxjedi/gopherbot/releases/download/$GB_LATEST/gopherbot-linux-amd64.tar.gz
 cd /opt
 tar xzvf $GBDL
 rm $GBDL
 
 BOT_NAME=$(aws ec2 describe-tags --filters Name=resource-type,Values=instance Name=resource-id,Values=$INSTANCE_ID | jq -r '.Tags[] | select(.Key == "robot-name").Value')
+echo "Detected robot name: $BOT_NAME"
 mkdir -p /var/lib/robots
 useradd -d /var/lib/robots/$BOT_NAME -G wheel -r -m -c "$BOT_NAME gopherbot" $BOT_NAME
 env-aws-params --silent -p /robots/$BOT_NAME --pristine $(which printenv) > /var/lib/robots/$BOT_NAME/.env
