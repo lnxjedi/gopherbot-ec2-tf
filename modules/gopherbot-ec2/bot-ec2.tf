@@ -23,7 +23,7 @@ resource "aws_launch_template" "bot-template" {
   instance_initiated_shutdown_behavior = "terminate"
   instance_type                        = var.instance-type
   update_default_version               = true
-  # user_data = filebase64("${path.module}/example.sh")
+  user_data = filebase64("${path.module}/bootstrap.sh")
 
   iam_instance_profile {
     name = aws_iam_instance_profile.bot_profile.name

@@ -28,7 +28,8 @@ resource "aws_iam_role" "bot_role" {
 EOF
   managed_policy_arns = [
     "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
-    "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+    "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy",
+    "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess",
   ]
   inline_policy {
     name = "param-access-policy"
