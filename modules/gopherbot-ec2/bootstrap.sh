@@ -8,7 +8,7 @@ amazon-linux-extras install -y ruby2.6
 sudo yum -y remove awscli
 
 export PATH=$PATH:/usr/local/bin
-export AWS_REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region)
+export AWS_REGION=$(curl -s http://169.254.169.254/latest/meta-data/placement/region)
 echo "Detected region: $REGION"
 export INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
 echo "Detected instance-id: $INSTANCE_ID"
