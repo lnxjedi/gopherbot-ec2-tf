@@ -29,7 +29,7 @@ resource "aws_launch_template" "bot-template" {
     name = aws_iam_instance_profile.bot_profile.name
   }
   monitoring {
-    enabled = true
+    enabled = false
   }
   network_interfaces {
     associate_public_ip_address = true
