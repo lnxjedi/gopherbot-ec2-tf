@@ -2,16 +2,16 @@
 
 # bootstrap.sh - Turn an Amazon Linux 2 instance in to a Gopherbot host
 
+yum -y update
+yum -y install jq git
+amazon-linux-extras install -y ruby2.6
+sudo yum -y remove awscli
+
 export PATH=$PATH:/usr/local/bin
 export AWS_REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | jq -r .region)
 echo "Detected region: $REGION"
 export INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
 echo "Detected instance-id: $INSTANCE_ID"
-
-yum -y update
-yum -y install jq git
-amazon-linux-extras install -y ruby2.6
-sudo yum -y remove awscli
 
 # Install the latest awscli (v2)
 cd /root
