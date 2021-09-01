@@ -22,6 +22,7 @@ resource "aws_launch_template" "bot-template" {
   image_id                             = data.aws_ami.amazon-linux-2.id
   instance_initiated_shutdown_behavior = "terminate"
   instance_type                        = var.instance-type
+  update_default_version               = true
   # user_data = filebase64("${path.module}/example.sh")
 
   iam_instance_profile {
@@ -41,12 +42,12 @@ resource "aws_launch_template" "bot-template" {
 }
 
 resource "aws_autoscaling_group" "immortal-bot" {
-  desired_capacity = 1
-  max_size         = 1
-  min_size         = 1
+  desired_capacity    = 1
+  max_size            = 1
+  min_size            = 1
+  vpc_zone_identifier = [var.subnet-id]
 
   launch_template {
-    name    = aws_launch_template.bot-template.name
-    version = "$Latest"
+    name = aws_launch_template.bot-template.name
   }
 }
