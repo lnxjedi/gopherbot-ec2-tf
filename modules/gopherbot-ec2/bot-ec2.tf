@@ -40,3 +40,13 @@ resource "aws_launch_template" "bot-template" {
   }
 }
 
+resource "aws_autoscaling_group" "immortal-bot" {
+  desired_capacity = 1
+  max_size         = 1
+  min_size         = 1
+
+  launch_template {
+    name    = aws_launch_template.bot-template.name
+    version = "$Latest"
+  }
+}
