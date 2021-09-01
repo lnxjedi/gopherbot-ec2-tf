@@ -8,15 +8,6 @@ data "aws_ami" "amazon-linux-2" {
   }
 }
 
-resource "aws_instance" "robot" {
-  ami                         = data.aws_ami.amazon-linux-2.id
-  instance_type               = var.instance-type
-  subnet_id                   = var.subnet-id
-  iam_instance_profile        = aws_iam_instance_profile.bot_profile.name
-  associate_public_ip_address = true
-  tags                        = var.tags
-}
-
 resource "aws_launch_configuration" "bot-template" {
   name          = "robot-template"
   image_id      = data.aws_ami.amazon-linux-2.id
@@ -37,6 +28,11 @@ resource "aws_autoscaling_group" "immortal-bot" {
   tag {
     key                 = "robot-name"
     value               = var.robot-name
+    propagate_at_launch = true
+  }
+  tag {
+    key = "name"
+    value = "${var.robot-name}-robot"
     propagate_at_launch = true
   }
   launch_configuration = aws_launch_configuration.bot-template.name
