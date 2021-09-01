@@ -9,7 +9,7 @@ sudo yum -y remove awscli
 
 export PATH=$PATH:/usr/local/bin
 export AWS_REGION=$(curl -s http://169.254.169.254/latest/meta-data/placement/region)
-echo "Detected region: $REGION"
+echo "Detected region: $AWS_REGION"
 export INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
 echo "Detected instance-id: $INSTANCE_ID"
 
@@ -72,3 +72,4 @@ EOF
 
 systemctl daemon-reload
 systemctl enable $BOT_NAME
+systemctl start $BOT_NAME
