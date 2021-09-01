@@ -36,7 +36,7 @@ GBDL=/root/gopherbot.tar.gz
 GB_LATEST=$(curl --silent https://api.github.com/repos/lnxjedi/gopherbot/releases/latest | jq -r .tag_name)
 curl -s -L -o $GBDL https://github.com/lnxjedi/gopherbot/releases/download/$GB_LATEST/gopherbot-linux-amd64.tar.gz
 cd /opt
-tar xzvf $GBDL
+tar xzf $GBDL
 rm $GBDL
 
 BOT_NAME=$(aws ec2 describe-tags --filters Name=resource-type,Values=instance Name=resource-id,Values=$INSTANCE_ID | jq -r '.Tags[] | select(.Key == "robot-name").Value')
