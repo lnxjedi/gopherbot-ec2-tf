@@ -31,7 +31,7 @@ resource "aws_autoscaling_group" "immortal-bot" {
     propagate_at_launch = true
   }
   tag {
-    key = "name"
+    key = "Name"
     value = "${var.robot-name}-robot"
     propagate_at_launch = true
   }
