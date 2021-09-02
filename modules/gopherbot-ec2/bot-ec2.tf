@@ -24,7 +24,6 @@ resource "aws_launch_template" "bot-template" {
   }
   network_interfaces {
     associate_public_ip_address = true
-    subnet_id                   = var.subnet-id
   }
   tag_specifications {
     resource_type = "instance"
